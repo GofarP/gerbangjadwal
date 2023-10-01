@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">GerbangJadwal</string>
+    <string name="txt_login_pengguna">Login Pengguna</string>
+    <string name="txt_masuk">Masuk</string>
+    <string name="txt_tambah_akun">Tambah Akun</string>
+    <string name="txt_e_mail_pengguna">E-Mail Pengguna</string>
+    <string name="txt_password_pengguna">Password Pengguna</string>
+    <string name="txt_daftar_pengguna">Daftar Pengguna</string>
+    <string name="txt_konfirmasi_password">Konfirmasi Password</string>
+    <string name="txt_masuk_disini">Masuk Disini</string>
+    <string name="txt_daftar">Daftar</string>
+    <string name="txt_selamat_datang">Selamat Datang</string>
+    <string name="txt_title_notifikasi">Title Notifikasi</string>
+    <string name="txt_isi_notifikasi">Isi Notifikasi</string>
+    <string name="txt_tgl_notifikasi">13-03-2013 00:00:00</string>
+    <string name="txt_jadwal">Jadwal: 10.00-10.05</string>
+    <string name="txt_durasi">Durasi Pintu Terbuka: 5 Menit</string>
+    <string name="txt_edit">Edit</string>
+    <string name="txt_hapus">Hapus</string>
+    <string name="txt_tambah_edit_jadwal">Tambah/Edit Jadwal</string>
+    <string name="txt_mulai_dari">Mulai Dari:</string>
+    <string name="txt_tambah_jadwal">Tambah Jadwal</string>
+    <string name="txt_kendali_manual">Kendali Manual</string>
+    <string name="txt_notifikasi">Notifikasi</string>
+    <string name="txt_atur_jadwal">Atur Jadwal</string>
+</resources>
