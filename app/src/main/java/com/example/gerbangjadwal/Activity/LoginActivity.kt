@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnlogin.setOnClickListener {
+
             email=binding.txtemail.text.toString().trim()
             password=binding.txtpassword.text.toString()
             user=User(email,password)
@@ -62,6 +63,10 @@ class LoginActivity : AppCompatActivity() {
                 login(user)
             }
 
+        }
+
+        binding.lbltambahakun.setOnClickListener{
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
 
     }
@@ -96,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
                 else
                 {
                     Toast.makeText(this@LoginActivity, response.body()?.message, Toast.LENGTH_SHORT).show()
+                    Log.d("Failed Login Debug",response.body() .toString())
                 }
             }
 

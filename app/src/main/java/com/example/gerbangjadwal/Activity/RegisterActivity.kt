@@ -38,6 +38,10 @@ class RegisterActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        preferencesManager=PreferenceManager()
+        preferencesManager.preferenceManager(this@RegisterActivity)
+
+
         window.statusBarColor=resources.getColor(R.color.green_main)
 
         binding.btndaftar.setOnClickListener {
@@ -86,7 +90,6 @@ class RegisterActivity : AppCompatActivity() {
                 {
                     Toast.makeText(this@RegisterActivity, "Sukses mendaftar akun", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
-                    preferencesManager=PreferenceManager()
                     preferencesManager.putString(Constant().IS_LOGIN_PERMITTED,Constant().TRUE)
                     finish()
                 }

@@ -52,9 +52,9 @@ interface APIInterface {
 
     @FormUrlEncoded
     @POST("edit.php")
-    fun editJadwal(@Field("waktu_terbuka") waktuTerbuka:String,
+    fun updateJadwal(@Field("waktu_terbuka") waktuTerbuka:String,
                      @Field("waktu_tertutup") waktuTertutup:String,
-                     @Field("durasi") durasi:Int,
+                     @Field("durasi") durasi:String,
                    @Field("id") id:String
     ):Call<APIResponse>
 

@@ -1,5 +1,6 @@
 package com.example.gerbangjadwal.Activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,10 +10,12 @@ import com.example.gerbangjadwal.APIClient.APIInterface
 import com.example.gerbangjadwal.R
 import com.example.gerbangjadwal.databinding.ActivityTambahEditJadwalBinding
 import com.example.gerbangjadwal.model.APIResponse
+import com.example.gerbangjadwal.model.Jadwal
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 class TambahEditJadwal : AppCompatActivity() {
@@ -44,6 +47,14 @@ class TambahEditJadwal : AppCompatActivity() {
 
         sdf= SimpleDateFormat("HH:mm:ss")
 
+        val intent=intent
+
+        if(intent.hasExtra("dataJadwal"))
+        {
+            val jadwal = intent.getParcelableExtra<Jadwal>("dataJadwal")
+            Toast.makeText(this@TambahEditJadwal, jadwal?.id, Toast.LENGTH_SHORT).show()
+        }
+
         binding.timepickerMulai.setIs24HourView(true)
         binding.timepickerSampai.setIs24HourView(true)
 
@@ -72,10 +83,8 @@ class TambahEditJadwal : AppCompatActivity() {
                 "$minute"
             }
 
+            jamDari="$jam:$min:"
 
-            jamDari="$jam:$min"
-
-            Toast.makeText(this@TambahEditJadwal, jamDari, Toast.LENGTH_SHORT).show()
         }
 
         binding.timepickerSampai.setOnTimeChangedListener{_, hourOfDay, minute->
@@ -96,8 +105,6 @@ class TambahEditJadwal : AppCompatActivity() {
             }
 
             jamSampai="$jam:$min"
-
-            Toast.makeText(this@TambahEditJadwal, jamSampai, Toast.LENGTH_SHORT).show()
 
         }
 
@@ -121,9 +128,9 @@ class TambahEditJadwal : AppCompatActivity() {
 
         binding.btntambahjadwal.setOnClickListener {
 
-            waktuDari="$jamDari:$detikDari"
+            waktuDari="$jamDari$detikDari"
             waktuSampai="$jamSampai:$detikSampai"
-            durasi=convertToMicroSecond(waktuDari,waktuSampai)
+            durasi= calculateDurationInMillis(waktuDari,waktuSampai).toString()
 
             if(!validasiWaktu(waktuDari,waktuSampai))
             {
@@ -152,6 +159,7 @@ class TambahEditJadwal : AppCompatActivity() {
             override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
                 if(response.body()?.success==1){
                     Toast.makeText(this@TambahEditJadwal, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@TambahEditJadwal,MenuJadwal::class.java))
                 }
                 else{
                     Toast.makeText(this@TambahEditJadwal, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
@@ -166,27 +174,67 @@ class TambahEditJadwal : AppCompatActivity() {
 
     }
 
+    private fun updateJadwal(terbuka:String, tertutup:String, durasi: String, id:String)
+    {
+        apiInterface=APIClient().getApiClient()!!.create(APIInterface::class.java)
+        val call = apiInterface.updateJadwal(terbuka,tertutup,durasi,id)
 
-    private fun convertToMicroSecond(start:String, end:String):String{
-        val waktuAwal =sdf.parse(start)
-        val waktuAkhir =sdf.parse(end)
+        call.enqueue(object :Callback<APIResponse>{
+            override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
+                if(response.body()?.success==1){
+                    Toast.makeText(this@TambahEditJadwal, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@TambahEditJadwal,MenuJadwal::class.java))
+                }
+                else{
+                    Toast.makeText(this@TambahEditJadwal, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        val perbedaanDetik = (waktuAkhir.time - waktuAwal.time) / 1000
+            override fun onFailure(call: Call<APIResponse>, t: Throwable) {
+                Log.d("Error tambah jadwal:",t.message.toString())
+            }
 
-        val selisihMicroseconds=perbedaanDetik *  1000
+        })
+    }
 
-        return selisihMicroseconds.toString()
+
+    fun calculateDurationInMillis(start: String, end: String): Long {
+        val sdf = SimpleDateFormat("HH:mm:ss")
+
+        return try {
+            val dateA = sdf.parse(start)
+            val dateB = sdf.parse(end)
+
+            val durationInMillis = dateB.time - dateA.time
+
+            durationInMillis
+        } catch (e: Exception) {
+            // Handle parsing exception
+            e.printStackTrace()
+            -1 // Return a negative value to indicate an error
+        }
     }
 
     private fun validasiWaktu(start:String, end:String):Boolean{
         var valid=false
 
-        val jamDari = sdf.parse(start)
-        val jamSampai = sdf.parse(end)
 
-        if (jamDari <= jamSampai) {
-            valid=true
+        if(jamDari.toString()=="" || jamSampai.toString()=="")
+        {
+            Toast.makeText(this@TambahEditJadwal, "Silahkan Masukkan Jam buka dan tutup gerbang secara valid", Toast.LENGTH_SHORT).show()
+            return true
         }
+
+        else{
+            val jamDari = sdf.parse(start)
+            val jamSampai = sdf.parse(end)
+
+            if (jamDari <= jamSampai) {
+                valid=true
+            }
+        }
+
+
 
         return valid
     }

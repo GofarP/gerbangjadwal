@@ -18,7 +18,7 @@
     <string name="txt_edit">Edit</string>
     <string name="txt_hapus">Hapus</string>
     <string name="txt_tambah_edit_jadwal">Tambah/Edit Jadwal</string>
-    <string name="txt_mulai_dari">Mulai Dari:</string>
+    <string name="txt_mulai_dari">Waktu Buka:</string>
     <string name="txt_tambah_jadwal">Tambah Jadwal</string>
     <string name="txt_kendali_manual">Kendali Manual</string>
     <string name="txt_notifikasi">Notifikasi</string>
